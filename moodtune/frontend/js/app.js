@@ -4,8 +4,7 @@
 // CONFIG
 // ======================================
 const CONFIG = {
-  API_BASE: "http://localhost:5000/api",
-
+  API_BASE: "https://moodtune-ptad.onrender.com/api",
   TOKEN_KEY: "moodtune_token",
   USER_KEY: "moodtune_user",
 };
