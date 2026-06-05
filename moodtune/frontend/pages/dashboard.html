@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard – MoodTune</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="../css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="dashboard-sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div style="width:32px;height:32px;background:var(--gradient-main);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">🎵</div>
+    <span style="font-family:var(--font-heading);font-weight:800;font-size:1.15rem;" class="gradient-text">MoodTune</span>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Main</div>
+    <a href="dashboard.html" class="sidebar-link active">
+      <i class="fas fa-home"></i>
+      <span class="link-text">Dashboard</span>
+    </a>
+    <a href="mood.html" class="sidebar-link">
+      <i class="fas fa-brain"></i>
+      <span class="link-text">Mood Detect</span>
+    </a>
+    <a href="music.html" class="sidebar-link">
+      <i class="fas fa-music"></i>
+      <span class="link-text">Music</span>
+    </a>
+    <a href="search.html" class="sidebar-link">
+      <i class="fas fa-search"></i>
+      <span class="link-text">Search</span>
+    </a>
+
+    <div class="nav-section-label">Library</div>
+    <a href="favorites.html" class="sidebar-link">
+      <i class="fas fa-heart"></i>
+      <span class="link-text">Favorites</span>
+    </a>
+    <a href="history.html" class="sidebar-link">
+      <i class="fas fa-history"></i>
+      <span class="link-text">History</span>
+    </a>
+
+    <div class="nav-section-label">Account</div>
+    <a href="profile.html" class="sidebar-link">
+      <i class="fas fa-user"></i>
+      <span class="link-text">Profile</span>
+    </a>
+    <a href="#" class="sidebar-link" id="logoutBtn">
+      <i class="fas fa-sign-out-alt"></i>
+      <span class="link-text">Logout</span>
+    </a>
+  </nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="dashboard-main">
+
+  <!-- Header -->
+  <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-3">
+    <div>
+      <h1 style="font-size:1.8rem;font-weight:800;margin-bottom:4px;" id="welcomeMsg">Good morning! 👋</h1>
+      <p style="color:var(--text-secondary);margin:0;">Here's your music journey overview</p>
+    </div>
+    <div class="d-flex gap-2">
+      <a href="mood.html" class="btn-primary" style="font-size:0.875rem;padding:10px 20px;">
+        <i class="fas fa-brain"></i> Detect My Mood
+      </a>
+    </div>
+  </div>
+
+  <!-- STATS CARDS -->
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-lg-3">
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background:rgba(124,58,237,0.15);color:var(--color-purple-light);">
+          <i class="fas fa-heart"></i>
+        </div>
+        <div class="stat-card-value gradient-text" id="statFavorites">–</div>
+        <div class="stat-card-label">Favorites</div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background:rgba(236,72,153,0.15);color:var(--color-pink);">
+          <i class="fas fa-brain"></i>
+        </div>
+        <div class="stat-card-value gradient-text" id="statMoods">–</div>
+        <div class="stat-card-label">Mood Checks</div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background:rgba(6,182,212,0.15);color:var(--color-cyan);">
+          <i class="fas fa-star"></i>
+        </div>
+        <div class="stat-card-value gradient-text" id="statTopMood">–</div>
+        <div class="stat-card-label">Top Mood</div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="stat-card">
+        <div class="stat-card-icon" style="background:rgba(16,185,129,0.15);color:var(--color-green);">
+          <i class="fas fa-calendar"></i>
+        </div>
+        <div class="stat-card-value gradient-text" id="statDays">–</div>
+        <div class="stat-card-label">Days Active</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+
+    <!-- Quick Mood Select -->
+    <div class="col-lg-7">
+      <div class="glass rounded-4 p-4 h-100">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <h2 style="font-size:1.1rem;font-weight:700;margin:0;">How Are You Feeling?</h2>
+          <a href="mood.html" style="font-size:0.8rem;color:var(--color-purple-light);">AI Detect →</a>
+        </div>
+        <div class="mood-grid" id="quickMoodGrid" style="grid-template-columns:repeat(4,1fr);"></div>
+      </div>
+    </div>
+
+    <!-- Recent Mood History -->
+    <div class="col-lg-5">
+      <div class="glass rounded-4 p-4 h-100">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <h2 style="font-size:1.1rem;font-weight:700;margin:0;">Recent Moods</h2>
+          <a href="history.html" style="font-size:0.8rem;color:var(--color-purple-light);">View all →</a>
+        </div>
+        <div id="recentMoodList">
+          <div class="skeleton" style="height:56px;margin-bottom:8px;"></div>
+          <div class="skeleton" style="height:56px;margin-bottom:8px;"></div>
+          <div class="skeleton" style="height:56px;margin-bottom:8px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Recommendations -->
+    <div class="col-12">
+      <div class="glass rounded-4 p-4">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <h2 style="font-size:1.1rem;font-weight:700;margin:0;">Popular Right Now</h2>
+          <a href="music.html" style="font-size:0.8rem;color:var(--color-purple-light);">Browse all →</a>
+        </div>
+        <div class="music-grid" id="dashMusicGrid">
+          <!-- Skeleton loaders -->
+          <div class="skeleton" style="height:280px;border-radius:16px;"></div>
+          <div class="skeleton" style="height:280px;border-radius:16px;"></div>
+          <div class="skeleton" style="height:280px;border-radius:16px;"></div>
+          <div class="skeleton" style="height:280px;border-radius:16px;"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- AUDIO PLAYER -->
+<div class="audio-player" id="audioPlayer">
+  <div class="player-song-info">
+    <img src="" class="player-thumb" alt="Now playing" id="playerThumb">
+    <div>
+      <div class="player-title" id="playerTitle">–</div>
+      <div class="player-artist" id="playerArtist">–</div>
+    </div>
+  </div>
+  <div class="player-controls">
+    <button class="player-btn" onclick="Player.audio && (Player.audio.currentTime = 0)">
+      <i class="fas fa-step-backward"></i>
+    </button>
+    <button class="player-btn play" onclick="Player.toggle()">
+      <i class="fas fa-play"></i>
+    </button>
+    <button class="player-btn" onclick="Player.audio && (Player.audio.currentTime = Player.audio.duration || 0)">
+      <i class="fas fa-step-forward"></i>
+    </button>
+  </div>
+  <div class="player-progress">
+    <span class="time-label" id="currentTime">0:00</span>
+    <div class="progress-bar-container">
+      <div class="progress-fill" style="width:0%"></div>
+    </div>
+    <span class="time-label" id="totalTime">0:30</span>
+  </div>
+  <button class="player-btn" onclick="document.getElementById('audioPlayer').classList.remove('active');">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../js/app.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  if (!Auth.requireAuth()) return;
+
+  const user = Auth.getUser();
+
+  // Welcome message based on time
+  const hour = new Date().getHours();
+  const greeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
+  document.getElementById('welcomeMsg').textContent = `${greeting}, ${user?.name?.split(' ')[0] || 'there'}! 👋`;
+
+  // Logout
+  document.getElementById('logoutBtn').addEventListener('click', (e) => {
+    e.preventDefault();
+    Auth.clearSession();
+    window.location.href = '../index.html';
+  });
+
+  // Load favorites
+  await Favorites.load();
+
+  // Load profile stats
+  const profileRes = await API.get('/user/profile');
+  if (profileRes?.ok) {
+    const { stats, recentMoodHistory } = profileRes.data;
+    document.getElementById('statFavorites').textContent = stats.favoritesCount;
+    document.getElementById('statMoods').textContent = stats.totalMoodChecks;
+
+    const topMoodEntry = Object.entries(stats.moodStats || {}).sort((a,b) => b[1]-a[1])[0];
+    const topMood = topMoodEntry ? topMoodEntry[0] : null;
+    document.getElementById('statTopMood').textContent = topMood
+      ? (MOODS[topMood]?.emoji + ' ' + MOODS[topMood]?.label)
+      : '–';
+
+    const joinDate = new Date(profileRes.data.user.createdAt);
+    const daysActive = Math.max(1, Math.floor((Date.now() - joinDate) / 86400000));
+    document.getElementById('statDays').textContent = daysActive;
+
+    // Recent moods
+    renderMoodHistory(recentMoodHistory);
+  }
+
+  // Build quick mood grid
+  buildMoodGrid();
+
+  // Load music
+  loadDashboardMusic();
+});
+
+function renderMoodHistory(history) {
+  const el = document.getElementById('recentMoodList');
+  if (!history || history.length === 0) {
+    el.innerHTML = `
+      <div class="empty-state" style="padding:30px 16px;">
+        <div class="empty-state-icon" style="font-size:2.5rem;">🎭</div>
+        <div class="empty-state-title">No mood history yet</div>
+        <div class="empty-state-subtitle">Start by detecting your mood!</div>
+      </div>`;
+    return;
+  }
+
+  el.innerHTML = history.map(item => {
+    const m = MOODS[item.mood] || { emoji: '🎵', label: item.mood };
+    return `
+    <div class="history-item">
+      <span class="history-emoji">${m.emoji}</span>
+      <div class="flex-1">
+        <div class="history-mood">${m.label}</div>
+        <div class="history-time">${formatRelativeTime(item.timestamp)}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function buildMoodGrid() {
+  const grid = document.getElementById('quickMoodGrid');
+  grid.innerHTML = Object.entries(MOODS).map(([key, m]) => `
+    <div class="mood-card" onclick="quickSelectMood('${key}')"
+         style="--mood-color:${m.gradient};--mood-border:${m.border};--mood-shadow:${m.shadow};--mood-bg:${m.gradient}15;">
+      <span class="mood-emoji">${m.emoji}</span>
+      <div class="mood-name">${m.label}</div>
+    </div>`).join('');
+}
+
+async function quickSelectMood(mood) {
+  // Save mood
+  await API.post('/mood/save', { mood, detectionMethod: 'manual' });
+  Toast.info(`${MOODS[mood].emoji} ${MOODS[mood].label} mood selected!`);
+  // Navigate to music page with mood
+  window.location.href = `music.html?mood=${mood}`;
+}
+
+async function loadDashboardMusic() {
+  const res = await API.get('/music/recommendations/happy');
+  if (res?.ok) {
+    renderMusicCards(res.data.tracks.slice(0, 4), 'dashMusicGrid', 'happy');
+  } else {
+    document.getElementById('dashMusicGrid').innerHTML =
+      `<div class="col-12"><div class="empty-state"><div class="empty-state-icon">🎵</div><div class="empty-state-title">Connect your backend to see music</div></div></div>`;
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account – MoodTune</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="../css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="auth-wrapper">
+  <div style="position:fixed;inset:0;background:radial-gradient(ellipse at top right,rgba(236,72,153,0.12) 0%,transparent 50%),radial-gradient(ellipse at bottom left,rgba(124,58,237,0.1) 0%,transparent 50%);pointer-events:none;"></div>
+
+  <div class="auth-card" style="position:relative;z-index:1;">
+    <div class="auth-logo">
+      <a href="../index.html" class="d-flex align-items-center gap-2 text-decoration-none">
+        <div style="width:36px;height:36px;background:var(--gradient-main);border-radius:8px;display:flex;align-items:center;justify-content:center;">🎵</div>
+        <span style="font-family:var(--font-heading);font-size:1.3rem;font-weight:800;" class="gradient-text">MoodTune</span>
+      </a>
+    </div>
+
+    <h1 class="auth-title">Create your account</h1>
+    <p class="auth-subtitle">Start discovering music that matches your every mood.</p>
+
+    <form id="registerForm" novalidate>
+      <div class="form-group">
+        <label class="form-label"><i class="fas fa-user me-2"></i>Full Name</label>
+        <input type="text" id="name" class="form-control" placeholder="Your name" required autocomplete="name">
+        <div class="invalid-feedback" id="nameError"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label"><i class="fas fa-envelope me-2"></i>Email Address</label>
+        <input type="email" id="email" class="form-control" placeholder="you@example.com" required autocomplete="email">
+        <div class="invalid-feedback" id="emailError"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label"><i class="fas fa-lock me-2"></i>Password</label>
+        <div style="position:relative;">
+          <input type="password" id="password" class="form-control" placeholder="Min 6 characters" required autocomplete="new-password" style="padding-right:48px;">
+          <button type="button" id="togglePassword" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-muted);cursor:pointer;">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
+        <div class="invalid-feedback" id="passwordError"></div>
+        <!-- Password strength -->
+        <div id="passwordStrength" style="display:none;margin-top:8px;">
+          <div style="display:flex;gap:4px;margin-bottom:4px;">
+            <div class="strength-bar" style="flex:1;height:3px;border-radius:2px;background:var(--border-color);transition:all 0.3s;"></div>
+            <div class="strength-bar" style="flex:1;height:3px;border-radius:2px;background:var(--border-color);transition:all 0.3s;"></div>
+            <div class="strength-bar" style="flex:1;height:3px;border-radius:2px;background:var(--border-color);transition:all 0.3s;"></div>
+            <div class="strength-bar" style="flex:1;height:3px;border-radius:2px;background:var(--border-color);transition:all 0.3s;"></div>
+          </div>
+          <div id="strengthLabel" style="font-size:0.75rem;color:var(--text-muted);"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label"><i class="fas fa-lock me-2"></i>Confirm Password</label>
+        <input type="password" id="confirmPassword" class="form-control" placeholder="Repeat password" required autocomplete="new-password">
+        <div class="invalid-feedback" id="confirmPasswordError"></div>
+      </div>
+
+      <!-- Terms -->
+      <div class="d-flex align-items-start gap-2 mb-4">
+        <input type="checkbox" id="terms" style="margin-top:4px;accent-color:var(--color-purple);width:16px;height:16px;flex-shrink:0;">
+        <label for="terms" style="font-size:0.85rem;color:var(--text-secondary);cursor:pointer;">
+          I agree to the <a href="#" style="color:var(--color-purple-light);">Terms of Service</a> and 
+          <a href="#" style="color:var(--color-purple-light);">Privacy Policy</a>
+        </label>
+      </div>
+
+      <button type="submit" class="btn-primary w-100 justify-content-center" id="submitBtn">
+        <span id="btnText"><i class="fas fa-user-plus me-2"></i>Create Account</span>
+        <span id="btnLoader" style="display:none;"><span class="loading-spinner"></span></span>
+      </button>
+    </form>
+
+    <p style="text-align:center;color:var(--text-secondary);font-size:0.9rem;margin-top:24px;">
+      Already have an account?
+      <a href="login.html" style="color:var(--color-purple-light);font-weight:600;">Sign in →</a>
+    </p>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../js/app.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  Auth.redirectIfLoggedIn();
+
+  const form = document.getElementById('registerForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const btnText = document.getElementById('btnText');
+  const btnLoader = document.getElementById('btnLoader');
+  const passwordInput = document.getElementById('password');
+
+  // Toggle password visibility
+  document.getElementById('togglePassword').addEventListener('click', () => {
+    const icon = document.querySelector('#togglePassword i');
+    if (passwordInput.type === 'password') {
+      passwordInput.type = 'text';
+      icon.className = 'fas fa-eye-slash';
+    } else {
+      passwordInput.type = 'password';
+      icon.className = 'fas fa-eye';
+    }
+  });
+
+  // Password strength indicator
+  passwordInput.addEventListener('input', () => {
+    const val = passwordInput.value;
+    const strengthEl = document.getElementById('passwordStrength');
+    const bars = document.querySelectorAll('.strength-bar');
+    const label = document.getElementById('strengthLabel');
+
+    if (val.length === 0) { strengthEl.style.display = 'none'; return; }
+    strengthEl.style.display = 'block';
+
+    let score = 0;
+    if (val.length >= 6) score++;
+    if (val.length >= 10) score++;
+    if (/[A-Z]/.test(val) && /[a-z]/.test(val)) score++;
+    if (/[0-9]/.test(val) || /[^A-Za-z0-9]/.test(val)) score++;
+
+    const colors = ['#ef4444', '#f59e0b', '#10b981', '#10b981'];
+    const labels = ['Weak', 'Fair', 'Good', 'Strong'];
+
+    bars.forEach((bar, i) => {
+      bar.style.background = i < score ? colors[score - 1] : 'var(--border-color)';
+    });
+    label.textContent = labels[score - 1] || '';
+    label.style.color = colors[score - 1];
+  });
+
+  const setLoading = (loading) => {
+    submitBtn.disabled = loading;
+    btnText.style.display = loading ? 'none' : 'flex';
+    btnLoader.style.display = loading ? 'flex' : 'none';
+  };
+
+  const clearErrors = () => {
+    document.querySelectorAll('.form-control').forEach(el => el.classList.remove('is-invalid'));
+    document.querySelectorAll('.invalid-feedback').forEach(el => el.textContent = '');
+  };
+
+  const showError = (field, msg) => {
+    const input = document.getElementById(field);
+    const error = document.getElementById(field + 'Error');
+    if (input) input.classList.add('is-invalid');
+    if (error) error.textContent = msg;
+  };
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    clearErrors();
+
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const password = passwordInput.value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    const terms = document.getElementById('terms').checked;
+
+    if (!name || name.length < 2) return showError('name', 'Name must be at least 2 characters.');
+    if (!email || !email.includes('@')) return showError('email', 'Please enter a valid email.');
+    if (!password || password.length < 6) return showError('password', 'Password must be at least 6 characters.');
+    if (password !== confirmPassword) return showError('confirmPassword', 'Passwords do not match.');
+    if (!terms) { Toast.warning('Please accept the terms and conditions.'); return; }
+
+    setLoading(true);
+
+    const res = await API.post('/auth/register', { name, email, password });
+
+    setLoading(false);
+
+    if (res?.ok) {
+      Auth.setSession(res.data.token, res.data.user);
+      Toast.success(`Account created! Welcome, ${res.data.user.name}! 🎵`);
+      setTimeout(() => window.location.href = 'dashboard.html', 800);
+    } else {
+      Toast.error(res?.data?.message || 'Registration failed.');
+      if (res?.data?.message?.includes('email')) {
+        showError('email', res.data.message);
+      }
+    }
+  });
+});
+</script>
+</body>
+</html>

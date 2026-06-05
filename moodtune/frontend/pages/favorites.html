@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Favorites – MoodTune</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="../css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="dashboard-sidebar">
+  <div class="sidebar-logo">
+    <div style="width:32px;height:32px;background:var(--gradient-main);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">🎵</div>
+    <span style="font-family:var(--font-heading);font-weight:800;font-size:1.15rem;" class="gradient-text">MoodTune</span>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Main</div>
+    <a href="dashboard.html" class="sidebar-link"><i class="fas fa-home"></i><span class="link-text">Dashboard</span></a>
+    <a href="mood.html" class="sidebar-link"><i class="fas fa-brain"></i><span class="link-text">Mood Detect</span></a>
+    <a href="music.html" class="sidebar-link"><i class="fas fa-music"></i><span class="link-text">Music</span></a>
+    <a href="search.html" class="sidebar-link"><i class="fas fa-search"></i><span class="link-text">Search</span></a>
+    <div class="nav-section-label">Library</div>
+    <a href="favorites.html" class="sidebar-link active"><i class="fas fa-heart"></i><span class="link-text">Favorites</span></a>
+    <a href="history.html" class="sidebar-link"><i class="fas fa-history"></i><span class="link-text">History</span></a>
+    <div class="nav-section-label">Account</div>
+    <a href="profile.html" class="sidebar-link"><i class="fas fa-user"></i><span class="link-text">Profile</span></a>
+    <a href="#" class="sidebar-link" id="logoutBtn"><i class="fas fa-sign-out-alt"></i><span class="link-text">Logout</span></a>
+  </nav>
+</aside>
+
+<main class="dashboard-main">
+
+  <div class="d-flex align-items-start justify-content-between mb-4 flex-wrap gap-3">
+    <div>
+      <h1 style="font-size:1.8rem;font-weight:800;margin-bottom:4px;">My Favorites ❤️</h1>
+      <p style="color:var(--text-secondary);margin:0;" id="favCount">Loading your playlist...</p>
+    </div>
+    <a href="music.html" class="btn-primary" style="font-size:0.875rem;padding:10px 18px;">
+      <i class="fas fa-plus"></i> Add More Songs
+    </a>
+  </div>
+
+  <!-- Filter by mood -->
+  <div class="mb-4" id="moodFilterBar" style="display:none;">
+    <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;scrollbar-width:none;">
+      <button class="mood-filter-btn active" data-mood="all">All Songs</button>
+    </div>
+  </div>
+
+  <!-- Favorites grid/list -->
+  <div id="favoritesContainer">
+    <div class="music-grid" id="favoritesGrid">
+      <div class="skeleton" style="height:300px;border-radius:16px;"></div>
+      <div class="skeleton" style="height:300px;border-radius:16px;"></div>
+      <div class="skeleton" style="height:300px;border-radius:16px;"></div>
+    </div>
+  </div>
+
+</main>
+
+<!-- AUDIO PLAYER -->
+<div class="audio-player" id="audioPlayer">
+  <div class="player-song-info">
+    <img src="" class="player-thumb" alt="Now playing">
+    <div>
+      <div class="player-title">–</div>
+      <div class="player-artist">–</div>
+    </div>
+  </div>
+  <div class="player-controls">
+    <button class="player-btn" onclick="Player.audio && (Player.audio.currentTime=0)"><i class="fas fa-step-backward"></i></button>
+    <button class="player-btn play" onclick="Player.toggle()"><i class="fas fa-play"></i></button>
+    <button class="player-btn" onclick="Player.audio && (Player.audio.currentTime=Player.audio.duration||0)"><i class="fas fa-step-forward"></i></button>
+  </div>
+  <div class="player-progress">
+    <span class="time-label" id="currentTime">0:00</span>
+    <div class="progress-bar-container"><div class="progress-fill" style="width:0%"></div></div>
+    <span class="time-label" id="totalTime">0:30</span>
+  </div>
+  <button class="player-btn" onclick="document.getElementById('audioPlayer').classList.remove('active');"><i class="fas fa-times"></i></button>
+</div>
+
+<style>
+.mood-filter-btn {
+  padding: 6px 16px;
+  border-radius: 20px;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  font-family: var(--font-body);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: var(--transition);
+}
+.mood-filter-btn:hover { background: var(--bg-card-hover); }
+.mood-filter-btn.active {
+  background: var(--gradient-main);
+  border-color: transparent;
+  color: white;
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../js/app.js"></script>
+<script>
+let allFavorites = [];
+let currentFilter = 'all';
+
+document.addEventListener('DOMContentLoaded', async () => {
+  if (!Auth.requireAuth()) return;
+
+  document.getElementById('logoutBtn').addEventListener('click', (e) => {
+    e.preventDefault();
+    Auth.clearSession();
+    window.location.href = '../index.html';
+  });
+
+  await loadFavorites();
+});
+
+async function loadFavorites() {
+  const res = await API.get('/favorites');
+  if (!res?.ok) {
+    Toast.error('Failed to load favorites.');
+    return;
+  }
+
+  allFavorites = res.data.favorites;
+  // Sync favorites IDs
+  Favorites.ids = new Set(allFavorites.map(f => String(f.songId)));
+
+  const count = allFavorites.length;
+  document.getElementById('favCount').textContent = `${count} song${count !== 1 ? 's' : ''} in your playlist`;
+
+  if (count === 0) {
+    document.getElementById('favoritesGrid').innerHTML = `
+      <div style="grid-column:1/-1;">
+        <div class="empty-state">
+          <div class="empty-state-icon">💔</div>
+          <div class="empty-state-title">No favorites yet</div>
+          <div class="empty-state-subtitle">
+            <a href="music.html" style="color:var(--color-purple-light);">Browse music</a> and heart the songs you love!
+          </div>
+        </div>
+      </div>`;
+    return;
+  }
+
+  // Build mood filter bar
+  buildMoodFilters();
+
+  renderFavorites(allFavorites);
+}
+
+function buildMoodFilters() {
+  const moods = [...new Set(allFavorites.map(f => f.mood).filter(Boolean))];
+  if (moods.length < 2) return;
+
+  const bar = document.getElementById('moodFilterBar');
+  bar.style.display = 'block';
+  const filterContainer = bar.querySelector('div');
+
+  moods.forEach(mood => {
+    const m = MOODS[mood];
+    if (!m) return;
+    const btn = document.createElement('button');
+    btn.className = 'mood-filter-btn';
+    btn.dataset.mood = mood;
+    btn.textContent = `${m.emoji} ${m.label}`;
+    btn.addEventListener('click', () => filterByMood(mood, btn));
+    filterContainer.appendChild(btn);
+  });
+
+  filterContainer.querySelector('[data-mood="all"]').addEventListener('click', (e) => {
+    filterByMood('all', e.target);
+  });
+}
+
+function filterByMood(mood, btn) {
+  currentFilter = mood;
+  document.querySelectorAll('.mood-filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  const filtered = mood === 'all' ? allFavorites : allFavorites.filter(f => f.mood === mood);
+  renderFavorites(filtered);
+}
+
+function renderFavorites(favorites) {
+  const grid = document.getElementById('favoritesGrid');
+
+  if (!favorites.length) {
+    grid.innerHTML = `
+      <div style="grid-column:1/-1;">
+        <div class="empty-state">
+          <div class="empty-state-icon">🎵</div>
+          <div class="empty-state-title">No songs in this category</div>
+        </div>
+      </div>`;
+    return;
+  }
+
+  // Convert to format expected by renderMusicCards
+  const tracks = favorites.map(f => ({
+    id: f.songId,
+    title: f.title,
+    artist: f.artist,
+    album: f.album,
+    image: f.image,
+    preview: f.preview,
+    mood: f.mood
+  }));
+
+  renderMusicCards(tracks, 'favoritesGrid', null);
+}
+</script>
+</body>
+</html>

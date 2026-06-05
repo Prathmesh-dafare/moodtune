@@ -1,0 +1,12 @@
+{
+  "name": "moodtune",
+  "version": "1.0.0",
+  "description": "MoodTune – AI Mood-Based Music Recommendation Platform",
+  "scripts": {
+    "backend": "cd backend && npm run dev",
+    "install:backend": "cd backend && npm install",
+    "start": "cd backend && npm start"
+  },
+  "author": "MoodTune",
+  "license": "MIT"
+}

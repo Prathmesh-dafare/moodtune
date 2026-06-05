@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Music – MoodTune</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link href="../css/style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- SIDEBAR -->
+    <aside class="dashboard-sidebar">
+      <div class="sidebar-logo">
+        <div
+          style="
+            width: 32px;
+            height: 32px;
+            background: var(--gradient-main);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+          "
+        >
+          🎵
+        </div>
+        <span
+          style="
+            font-family: var(--font-heading);
+            font-weight: 800;
+            font-size: 1.15rem;
+          "
+          class="gradient-text"
+          >MoodTune</span
+        >
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Main</div>
+        <a href="dashboard.html" class="sidebar-link"
+          ><i class="fas fa-home"></i
+          ><span class="link-text">Dashboard</span></a
+        >
+        <a href="mood.html" class="sidebar-link"
+          ><i class="fas fa-brain"></i
+          ><span class="link-text">Mood Detect</span></a
+        >
+        <a href="music.html" class="sidebar-link active"
+          ><i class="fas fa-music"></i><span class="link-text">Music</span></a
+        >
+        <a href="search.html" class="sidebar-link"
+          ><i class="fas fa-search"></i><span class="link-text">Search</span></a
+        >
+        <div class="nav-section-label">Library</div>
+        <a href="favorites.html" class="sidebar-link"
+          ><i class="fas fa-heart"></i
+          ><span class="link-text">Favorites</span></a
+        >
+        <a href="history.html" class="sidebar-link"
+          ><i class="fas fa-history"></i
+          ><span class="link-text">History</span></a
+        >
+        <div class="nav-section-label">Account</div>
+        <a href="profile.html" class="sidebar-link"
+          ><i class="fas fa-user"></i><span class="link-text">Profile</span></a
+        >
+        <a href="#" class="sidebar-link" id="logoutBtn"
+          ><i class="fas fa-sign-out-alt"></i
+          ><span class="link-text">Logout</span></a
+        >
+      </nav>
+    </aside>
+
+    <main class="dashboard-main">
+      <!-- Header -->
+      <div
+        class="d-flex align-items-start justify-content-between mb-4 flex-wrap gap-3"
+      >
+        <div>
+          <div
+            id="moodBadge"
+            style="
+              display: inline-flex;
+              align-items: center;
+              gap: 8px;
+              padding: 4px 14px;
+              border-radius: 20px;
+              font-size: 0.8rem;
+              font-weight: 600;
+              margin-bottom: 8px;
+              border: 1px solid var(--border-color);
+              background: var(--glass-bg);
+            "
+          ></div>
+          <h1
+            style="font-size: 1.8rem; font-weight: 800; margin-bottom: 4px"
+            id="pageTitle"
+          >
+            Music Recommendations
+          </h1>
+          <p style="color: var(--text-secondary); margin: 0" id="pageSubtitle">
+            Songs curated just for your mood
+          </p>
+        </div>
+        <a
+          href="mood.html"
+          class="btn-outline"
+          style="font-size: 0.875rem; padding: 10px 18px"
+        >
+          <i class="fas fa-sync-alt"></i> Change Mood
+        </a>
+      </div>
+
+      <!-- Mood Filter Tabs -->
+      <div class="mb-3">
+        <div
+          style="
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            scrollbar-width: none;
+          "
+          id="moodTabs"
+        >
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Language Selector -->
+      <!-- Music Filters -->
+      <div
+        class="mb-4"
+        style="display: flex; gap: 15px; flex-wrap: wrap; align-items: center"
+      >
+        <!-- Language -->
+        <div>
+          <label class="mb-1 d-block">Language</label>
+          <select id="languageSelect" class="form-select" style="width: 180px">
+            <option value="hindi">🇮🇳 Hindi</option>
+            <option value="english">🌍 English</option>
+          </select>
+        </div>
+
+        <!-- Era -->
+        <div>
+          <label class="mb-1 d-block">Music Era</label>
+          <select id="eraSelect" class="form-select" style="width: 180px">
+            <option value="latest">🔥 Latest</option>
+            <option value="90s">📻 90s</option>
+            <option value="2000s">💿 2000s</option>
+            <option value="2010s">🎧 2010s</option>
+          </select>
+        </div>
+
+        <!-- Genre -->
+      </div>
+      <!-- Loading / Music Grid -->
+      <div id="musicContainer">
+        <div class="music-grid" id="musicGrid">
+          <div
+            class="skeleton"
+            style="height: 300px; border-radius: 16px"
+          ></div>
+          <div
+            class="skeleton"
+            style="height: 300px; border-radius: 16px"
+          ></div>
+          <div
+            class="skeleton"
+            style="height: 300px; border-radius: 16px"
+          ></div>
+          <div
+            class="skeleton"
+            style="height: 300px; border-radius: 16px"
+          ></div>
+          <div
+            class="skeleton"
+            style="height: 300px; border-radius: 16px"
+          ></div>
+          <div
+            class="skeleton"
+            style="height: 300px; border-radius: 16px"
+          ></div>
+        </div>
+      </div>
+    </main>
+
+    <!-- AUDIO PLAYER -->
+    <div class="audio-player" id="audioPlayer">
+      <div class="player-song-info">
+        <img src="" class="player-thumb" alt="Now playing" />
+        <div>
+          <div class="player-title">–</div>
+          <div class="player-artist">–</div>
+        </div>
+      </div>
+      <div class="player-controls">
+        <button
+          class="player-btn"
+          onclick="Player.audio && (Player.audio.currentTime = 0)"
+        >
+          <i class="fas fa-step-backward"></i>
+        </button>
+        <button class="player-btn play" onclick="Player.toggle()">
+          <i class="fas fa-play"></i>
+        </button>
+        <button
+          class="player-btn"
+          onclick="
+            Player.audio &&
+              (Player.audio.currentTime = Player.audio.duration || 0)
+          "
+        >
+          <i class="fas fa-step-forward"></i>
+        </button>
+      </div>
+      <div class="player-progress">
+        <span class="time-label" id="currentTime">0:00</span>
+        <div class="progress-bar-container">
+          <div class="progress-fill" style="width: 0%"></div>
+        </div>
+        <span class="time-label" id="totalTime">0:30</span>
+      </div>
+      <button
+        class="player-btn"
+        onclick="
+          document.getElementById('audioPlayer').classList.remove('active')
+        "
+      >
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <style>
+      .mood-tab {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 18px;
+        border-radius: 50px;
+        border: 1px solid var(--glass-border);
+        background: var(--glass-bg);
+        color: var(--text-secondary);
+        font-size: 0.85rem;
+        font-weight: 500;
+        font-family: var(--font-body);
+        cursor: pointer;
+        white-space: nowrap;
+        transition: var(--transition);
+      }
+      .mood-tab:hover {
+        background: var(--bg-card-hover);
+        color: var(--text-primary);
+      }
+      .mood-tab.active {
+        background: var(--gradient-main);
+        border-color: transparent;
+        color: white;
+      }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/app.js"></script>
+    <script>
+      let currentMood = "happy";
+
+      const getSelectedLanguage = () => {
+        return localStorage.getItem("moodtune_language") || "hindi";
+      };
+      const getSelectedEra = () => {
+        return localStorage.getItem("moodtune_era") || "latest";
+      };
+
+      const getSelectedGenre = () => {
+        return localStorage.getItem("moodtune_genre") || "all";
+      };
+
+      const setSelectedEra = (era) => {
+        localStorage.setItem("moodtune_era", era);
+      };
+
+      const setSelectedGenre = (genre) => {
+        localStorage.setItem("moodtune_genre", genre);
+      };
+
+      const setSelectedLanguage = (lang) => {
+        localStorage.setItem("moodtune_language", lang);
+      };
+
+      document.addEventListener("DOMContentLoaded", async () => {
+        if (!Auth.requireAuth()) return;
+
+        document.getElementById("logoutBtn").addEventListener("click", (e) => {
+          e.preventDefault();
+          Auth.clearSession();
+          window.location.href = "../index.html";
+        });
+
+        // Get mood from URL
+        const params = new URLSearchParams(window.location.search);
+        currentMood = params.get("mood") || "happy";
+        if (!MOODS[currentMood]) currentMood = "happy";
+
+        // Load favorites
+        await Favorites.load();
+        const languageSelect = document.getElementById("languageSelect");
+        const eraSelect = document.getElementById("eraSelect");
+
+        languageSelect.value = getSelectedLanguage();
+        eraSelect.value = getSelectedEra();
+
+        languageSelect.addEventListener("change", () => {
+          setSelectedLanguage(languageSelect.value);
+          loadMusic(currentMood);
+        });
+
+        eraSelect.addEventListener("change", () => {
+          setSelectedEra(eraSelect.value);
+          loadMusic(currentMood);
+        });
+
+        // Build mood tabs
+        buildMoodTabs();
+
+        // Update header
+        updateHeader();
+
+        // Load music
+        loadMusic(currentMood);
+      });
+
+      function buildMoodTabs() {
+        const container = document.getElementById("moodTabs");
+        container.innerHTML = Object.entries(MOODS)
+          .map(
+            ([key, m]) => `
+    <button class="mood-tab ${key === currentMood ? "active" : ""}"
+            onclick="switchMood('${key}')" id="tab-${key}">
+      ${m.emoji} ${m.label}
+    </button>`,
+          )
+          .join("");
+      }
+
+      function updateHeader() {
+        const m = MOODS[currentMood];
+        document.getElementById("moodBadge").innerHTML =
+          `${m.emoji} ${m.label} Vibes`;
+        document.getElementById("moodBadge").style.borderColor = m.border;
+        document.getElementById("moodBadge").style.color = m.color;
+        document.getElementById("pageTitle").textContent = `${m.label} Music`;
+        document.getElementById("pageSubtitle").textContent =
+          `Perfect songs for when you're feeling ${m.label.toLowerCase()}`;
+      }
+
+      async function switchMood(mood) {
+        currentMood = mood;
+        // Update tabs
+        document
+          .querySelectorAll(".mood-tab")
+          .forEach((t) => t.classList.remove("active"));
+        document.getElementById(`tab-${mood}`)?.classList.add("active");
+        updateHeader();
+        // Update URL without reload
+        history.replaceState(null, "", `music.html?mood=${mood}`);
+        loadMusic(mood);
+      }
+
+      async function loadMusic(mood) {
+        const grid = document.getElementById("musicGrid");
+        // Show skeletons
+        grid.innerHTML = Array(8)
+          .fill(
+            `<div class="skeleton" style="height:300px;border-radius:16px;"></div>`,
+          )
+          .join("");
+
+        const language = getSelectedLanguage();
+        const era = getSelectedEra();
+        const genre = getSelectedGenre();
+
+        const res = await API.get(
+          `/music/recommendations/${mood}?language=${language}&era=${era}`,
+        );
+
+        if (res?.ok && res.data.tracks?.length > 0) {
+          renderMusicCards(res.data.tracks, "musicGrid", mood);
+        } else {
+          grid.innerHTML = `
+      <div class="col-12" style="grid-column:1/-1;">
+        <div class="empty-state">
+          <div class="empty-state-icon">🎵</div>
+          <div class="empty-state-title">Couldn't load music right now</div>
+          <div class="empty-state-subtitle">Make sure your backend is running and Deezer API is accessible.</div>
+          <button class="btn-primary mt-3" onclick="loadMusic('${mood}')">
+            <i class="fas fa-redo me-2"></i>Retry
+          </button>
+        </div>
+      </div>`;
+        }
+      }
+    </script>
+  </body>
+</html>

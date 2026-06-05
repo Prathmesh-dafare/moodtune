@@ -1,0 +1,833 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MoodTune – AI Mood-Based Music Recommendations</title>
+    <meta
+      name="description"
+      content="Discover music that matches your mood with AI-powered recommendations. MoodTune analyzes your emotions and finds the perfect songs for you."
+    />
+
+    <!-- Bootstrap 5 -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <!-- AOS Animations -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Custom CSS -->
+    <link href="css/style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- ==============================
+     NAVBAR
+     ============================== -->
+    <nav class="navbar navbar-expand-lg">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">
+          <div class="logo-icon">🎵</div>
+          <span class="gradient-text">MoodTune</span>
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navMenu"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navMenu">
+          <ul class="navbar-nav mx-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="#features">Features</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#how-it-works">How It Works</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#moods">Moods</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#testimonials">Reviews</a>
+            </li>
+          </ul>
+          <div class="d-flex gap-2 mt-3 mt-lg-0" id="navActions">
+            <a href="pages/login.html" class="btn-outline btn btn-sm">Login</a>
+            <a href="pages/register.html" class="btn-primary btn btn-sm"
+              >Get Started</a
+            >
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ==============================
+     HERO SECTION
+     ============================== -->
+    <section class="hero">
+      <div class="hero-bg"></div>
+
+      <!-- Floating music notes -->
+      <div class="floating-notes" id="floatingNotes"></div>
+
+      <div class="container position-relative">
+        <div class="row align-items-center g-5">
+          <div class="col-lg-6">
+            <div class="hero-badge" data-aos="fade-up" data-aos-delay="0">
+              <i class="fas fa-robot"></i>
+              AI-Powered Music Discovery
+            </div>
+            <h1 class="hero-title" data-aos="fade-up" data-aos-delay="100">
+              Music That Feels
+              <span class="gradient-text">Your Mood</span>
+            </h1>
+            <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="200">
+              Tell us how you feel and let our AI find the perfect soundtrack
+              for your emotions. From heartbreak to euphoria — every mood has
+              its music.
+            </p>
+            <div class="hero-actions" data-aos="fade-up" data-aos-delay="300">
+              <a href="pages/register.html" class="btn-primary">
+                <i class="fas fa-music"></i> Start Listening Free
+              </a>
+              <a href="#how-it-works" class="btn-outline">
+                <i class="fas fa-play-circle"></i> See How It Works
+              </a>
+            </div>
+            <div class="hero-stats" data-aos="fade-up" data-aos-delay="400">
+              <div class="hero-stat">
+                <div class="hero-stat-value">90M+</div>
+                <div class="hero-stat-label">Songs Available</div>
+              </div>
+              <div class="hero-stat">
+                <div class="hero-stat-value">8</div>
+                <div class="hero-stat-label">Mood Categories</div>
+              </div>
+              <div class="hero-stat">
+                <div class="hero-stat-value">100%</div>
+                <div class="hero-stat-label">Free to Use</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6" data-aos="fade-left" data-aos-delay="200">
+            <div class="hero-visual">
+              <!-- Main card -->
+              <div
+                class="hero-card glass"
+                style="max-width: 420px; margin: 0 auto"
+              >
+                <div class="d-flex align-items-center gap-3 mb-4">
+                  <div class="wave-container">
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                  </div>
+                  <div>
+                    <div style="font-weight: 700">Now Playing</div>
+                    <div
+                      style="font-size: 0.8rem; color: var(--text-secondary)"
+                    >
+                      Based on your mood
+                    </div>
+                  </div>
+                  <div class="ms-auto" style="color: var(--color-pink)">❤️</div>
+                </div>
+
+                <!-- Mock song card -->
+                <div class="glass p-3 rounded-3 mb-3" id="heroNowPlaying">
+                  <div class="d-flex gap-3 align-items-center">
+                    <div
+                      style="
+                        width: 56px;
+                        height: 56px;
+                        border-radius: 10px;
+                        background: var(--gradient-main);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 1.5rem;
+                        flex-shrink: 0;
+                      "
+                    >
+                      🎵
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <div style="font-weight: 600" class="mood-song-title">
+                        Blinding Lights
+                      </div>
+                      <div
+                        style="font-size: 0.8rem; color: var(--text-secondary)"
+                      >
+                        The Weeknd
+                      </div>
+                    </div>
+                    <div
+                      style="
+                        color: var(--color-purple-light);
+                        font-size: 0.8rem;
+                      "
+                    >
+                      3:20
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Mood pills -->
+                <div class="d-flex gap-2 flex-wrap mb-4" id="heroMoodPills">
+                  <span
+                    class="badge"
+                    style="
+                      background: rgba(245, 158, 11, 0.15);
+                      color: #fcd34d;
+                      border: 1px solid rgba(245, 158, 11, 0.3);
+                    "
+                    >😊 Happy</span
+                  >
+                  <span
+                    class="badge"
+                    style="
+                      background: rgba(236, 72, 153, 0.15);
+                      color: #f9a8d4;
+                      border: 1px solid rgba(236, 72, 153, 0.3);
+                    "
+                    >❤️ Romantic</span
+                  >
+                  <span
+                    class="badge"
+                    style="
+                      background: rgba(124, 58, 237, 0.15);
+                      color: #a78bfa;
+                      border: 1px solid rgba(124, 58, 237, 0.3);
+                    "
+                    >🔥 Motivated</span
+                  >
+                </div>
+
+                <!-- AI detect preview -->
+                <div class="glass p-3 rounded-3">
+                  <div
+                    style="
+                      font-size: 0.8rem;
+                      color: var(--text-muted);
+                      margin-bottom: 8px;
+                    "
+                  >
+                    <i class="fas fa-robot me-1"></i>AI Mood Detection
+                  </div>
+                  <div
+                    style="
+                      font-size: 0.9rem;
+                      color: var(--text-secondary);
+                      font-style: italic;
+                    "
+                  >
+                    "I feel so pumped and ready to take on the world today!"
+                  </div>
+                  <div class="mt-2 d-flex align-items-center gap-2">
+                    <span style="color: var(--color-green); font-size: 0.8rem"
+                      ><i class="fas fa-check-circle me-1"></i>Detected:
+                      <strong>Energetic 💪</strong></span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================
+     FEATURES SECTION
+     ============================== -->
+    <section id="features" style="background: var(--bg-secondary)">
+      <div class="container">
+        <div class="text-center mb-5">
+          <div class="section-badge" data-aos="fade-up">
+            <i class="fas fa-star"></i> Features
+          </div>
+          <h2 class="section-title" data-aos="fade-up" data-aos-delay="100">
+            Everything You Need
+          </h2>
+          <p class="section-subtitle" data-aos="fade-up" data-aos-delay="200">
+            Powered by AI and free music APIs to give you the ultimate
+            mood-based listening experience.
+          </p>
+        </div>
+        <div class="row g-4">
+          <div class="col-md-4" data-aos="fade-up" data-aos-delay="0">
+            <div class="feature-card glass">
+              <div
+                class="feature-icon"
+                style="background: rgba(124, 58, 237, 0.15)"
+              >
+                🤖
+              </div>
+              <h3 style="font-size: 1.2rem; margin-bottom: 12px">
+                AI Mood Detection
+              </h3>
+              <p
+                style="
+                  color: var(--text-secondary);
+                  font-size: 0.9rem;
+                  line-height: 1.7;
+                "
+              >
+                Just type how you feel in plain text. Our AI powered by Hugging
+                Face analyzes your emotions and maps them to the perfect music
+                genre instantly.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+            <div class="feature-card glass">
+              <div
+                class="feature-icon"
+                style="background: rgba(236, 72, 153, 0.15)"
+              >
+                🎵
+              </div>
+              <h3 style="font-size: 1.2rem; margin-bottom: 12px">
+                90M+ Songs Library
+              </h3>
+              <p
+                style="
+                  color: var(--text-secondary);
+                  font-size: 0.9rem;
+                  line-height: 1.7;
+                "
+              >
+                Connected to Deezer's massive music catalog with 30-second
+                previews, album art, and artist info for every track we
+                recommend.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+            <div class="feature-card glass">
+              <div
+                class="feature-icon"
+                style="background: rgba(6, 182, 212, 0.15)"
+              >
+                ❤️
+              </div>
+              <h3 style="font-size: 1.2rem; margin-bottom: 12px">
+                Personal Playlist
+              </h3>
+              <p
+                style="
+                  color: var(--text-secondary);
+                  font-size: 0.9rem;
+                  line-height: 1.7;
+                "
+              >
+                Save your favorite songs and build playlists tied to your
+                emotional journey. Track your mood history over time and
+                rediscover old favorites.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-4" data-aos="fade-up" data-aos-delay="0">
+            <div class="feature-card glass">
+              <div
+                class="feature-icon"
+                style="background: rgba(16, 185, 129, 0.15)"
+              >
+                🔍
+              </div>
+              <h3 style="font-size: 1.2rem; margin-bottom: 12px">
+                Smart Search
+              </h3>
+              <p
+                style="
+                  color: var(--text-secondary);
+                  font-size: 0.9rem;
+                  line-height: 1.7;
+                "
+              >
+                Search any song, artist, or album from Deezer's library. Preview
+                tracks instantly and add them to your favorites.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+            <div class="feature-card glass">
+              <div
+                class="feature-icon"
+                style="background: rgba(245, 158, 11, 0.15)"
+              >
+                📊
+              </div>
+              <h3 style="font-size: 1.2rem; margin-bottom: 12px">
+                Mood Analytics
+              </h3>
+              <p
+                style="
+                  color: var(--text-secondary);
+                  font-size: 0.9rem;
+                  line-height: 1.7;
+                "
+              >
+                See your emotional patterns over time. Discover which moods you
+                experience most and what music resonates with each state.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+            <div class="feature-card glass">
+              <div
+                class="feature-icon"
+                style="background: rgba(167, 139, 250, 0.15)"
+              >
+                📱
+              </div>
+              <h3 style="font-size: 1.2rem; margin-bottom: 12px">
+                Mobile Friendly
+              </h3>
+              <p
+                style="
+                  color: var(--text-secondary);
+                  font-size: 0.9rem;
+                  line-height: 1.7;
+                "
+              >
+                Fully responsive design works beautifully on any device. Access
+                your music recommendations anywhere, anytime.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================
+     HOW IT WORKS
+     ============================== -->
+    <section id="how-it-works">
+      <div class="container">
+        <div class="text-center mb-5">
+          <div class="section-badge" data-aos="fade-up">
+            <i class="fas fa-lightbulb"></i> Process
+          </div>
+          <h2 class="section-title" data-aos="fade-up" data-aos-delay="100">
+            How It Works
+          </h2>
+          <p class="section-subtitle" data-aos="fade-up" data-aos-delay="200">
+            Three simple steps to discover your perfect soundtrack.
+          </p>
+        </div>
+        <div class="row g-4 position-relative">
+          <div class="col-md-4" data-aos="fade-up" data-aos-delay="0">
+            <div class="step-card glass">
+              <div class="step-number">1</div>
+              <h3 style="font-size: 1.2rem; margin-bottom: 12px">
+                Express Your Mood
+              </h3>
+              <p
+                style="
+                  color: var(--text-secondary);
+                  font-size: 0.9rem;
+                  line-height: 1.7;
+                "
+              >
+                Type how you feel or select from our 8 mood categories. Our AI
+                understands your emotions in natural language.
+              </p>
+              <div style="font-size: 2rem; margin-top: 16px">✍️</div>
+            </div>
+          </div>
+          <div class="col-md-4" data-aos="fade-up" data-aos-delay="150">
+            <div class="step-card glass">
+              <div class="step-number">2</div>
+              <h3 style="font-size: 1.2rem; margin-bottom: 12px">
+                AI Analyzes & Maps
+              </h3>
+              <p
+                style="
+                  color: var(--text-secondary);
+                  font-size: 0.9rem;
+                  line-height: 1.7;
+                "
+              >
+                Our NLP model detects your emotional state and maps it to the
+                best music genre for your current feeling.
+              </p>
+              <div style="font-size: 2rem; margin-top: 16px">🤖</div>
+            </div>
+          </div>
+          <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+            <div class="step-card glass">
+              <div class="step-number">3</div>
+              <h3 style="font-size: 1.2rem; margin-bottom: 12px">
+                Discover & Enjoy
+              </h3>
+              <p
+                style="
+                  color: var(--text-secondary);
+                  font-size: 0.9rem;
+                  line-height: 1.7;
+                "
+              >
+                Get personalized song recommendations with previews. Save
+                favorites and build your emotional music library.
+              </p>
+              <div style="font-size: 2rem; margin-top: 16px">🎧</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================
+     MOOD CATEGORIES
+     ============================== -->
+    <section id="moods" style="background: var(--bg-secondary)">
+      <div class="container">
+        <div class="text-center mb-5">
+          <div class="section-badge" data-aos="fade-up">
+            <i class="fas fa-heart"></i> Emotions
+          </div>
+          <h2 class="section-title" data-aos="fade-up" data-aos-delay="100">
+            8 Mood Categories
+          </h2>
+          <p class="section-subtitle" data-aos="fade-up" data-aos-delay="200">
+            Every emotion has a soundtrack. Which one matches your vibe?
+          </p>
+        </div>
+        <div class="mood-grid" data-aos="fade-up" data-aos-delay="300">
+          <div
+            class="mood-card"
+            style="
+              --mood-color: linear-gradient(135deg, #f59e0b, #fbbf24);
+              --mood-border: rgba(245, 158, 11, 0.5);
+              --mood-shadow: rgba(245, 158, 11, 0.3);
+            "
+          >
+            <span class="mood-emoji">😊</span>
+            <div class="mood-name">Happy</div>
+          </div>
+          <div
+            class="mood-card"
+            style="
+              --mood-color: linear-gradient(135deg, #3b82f6, #60a5fa);
+              --mood-border: rgba(96, 165, 250, 0.5);
+              --mood-shadow: rgba(96, 165, 250, 0.3);
+            "
+          >
+            <span class="mood-emoji">😢</span>
+            <div class="mood-name">Sad</div>
+          </div>
+          <div
+            class="mood-card"
+            style="
+              --mood-color: linear-gradient(135deg, #10b981, #34d399);
+              --mood-border: rgba(52, 211, 153, 0.5);
+              --mood-shadow: rgba(52, 211, 153, 0.3);
+            "
+          >
+            <span class="mood-emoji">😌</span>
+            <div class="mood-name">Relaxed</div>
+          </div>
+          <div
+            class="mood-card"
+            style="
+              --mood-color: linear-gradient(135deg, #ef4444, #f97316);
+              --mood-border: rgba(249, 115, 22, 0.5);
+              --mood-shadow: rgba(249, 115, 22, 0.3);
+            "
+          >
+            <span class="mood-emoji">💪</span>
+            <div class="mood-name">Energetic</div>
+          </div>
+          <div
+            class="mood-card"
+            style="
+              --mood-color: linear-gradient(135deg, #ec4899, #f9a8d4);
+              --mood-border: rgba(236, 72, 153, 0.5);
+              --mood-shadow: rgba(236, 72, 153, 0.3);
+            "
+          >
+            <span class="mood-emoji">❤️</span>
+            <div class="mood-name">Romantic</div>
+          </div>
+          <div
+            class="mood-card"
+            style="
+              --mood-color: linear-gradient(135deg, #dc2626, #ef4444);
+              --mood-border: rgba(239, 68, 68, 0.5);
+              --mood-shadow: rgba(239, 68, 68, 0.3);
+            "
+          >
+            <span class="mood-emoji">😡</span>
+            <div class="mood-name">Angry</div>
+          </div>
+          <div
+            class="mood-card"
+            style="
+              --mood-color: linear-gradient(135deg, #7c3aed, #a78bfa);
+              --mood-border: rgba(167, 139, 250, 0.5);
+              --mood-shadow: rgba(167, 139, 250, 0.3);
+            "
+          >
+            <span class="mood-emoji">🔥</span>
+            <div class="mood-name">Motivated</div>
+          </div>
+          <div
+            class="mood-card"
+            style="
+              --mood-color: linear-gradient(135deg, #06b6d4, #22d3ee);
+              --mood-border: rgba(34, 211, 238, 0.5);
+              --mood-shadow: rgba(34, 211, 238, 0.3);
+            "
+          >
+            <span class="mood-emoji">🎉</span>
+            <div class="mood-name">Party</div>
+          </div>
+        </div>
+        <div class="text-center mt-5">
+          <a href="pages/register.html" class="btn-primary">
+            <i class="fas fa-music"></i> Find My Music
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================
+     TESTIMONIALS
+     ============================== -->
+    <section id="testimonials">
+      <div class="container">
+        <div class="text-center mb-5">
+          <div class="section-badge" data-aos="fade-up">
+            <i class="fas fa-quote-right"></i> Reviews
+          </div>
+          <h2 class="section-title" data-aos="fade-up" data-aos-delay="100">
+            Loved by Music Fans
+          </h2>
+        </div>
+        <div class="row g-4">
+          <div class="col-md-4" data-aos="fade-up" data-aos-delay="0">
+            <div class="testimonial-card">
+              <div class="testimonial-stars">★★★★★</div>
+              <p class="testimonial-text">
+                "This app is exactly what I needed! When I told it I was feeling
+                anxious before a presentation, it recommended the most calming
+                playlist."
+              </p>
+              <div class="testimonial-author">
+                <div class="testimonial-avatar">AP</div>
+                <div>
+                  <div class="testimonial-name">Aarav Patel</div>
+                  <div class="testimonial-role">Student, Mumbai</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+            <div class="testimonial-card">
+              <div class="testimonial-stars">★★★★★</div>
+              <p class="testimonial-text">
+                "I love how it understands natural language! I typed 'I'm
+                heartbroken' and it gave me the perfect sad bops to cry to. Felt
+                so understood."
+              </p>
+              <div class="testimonial-author">
+                <div class="testimonial-avatar">SS</div>
+                <div>
+                  <div class="testimonial-name">Sara Singh</div>
+                  <div class="testimonial-role">Designer, Bangalore</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+            <div class="testimonial-card">
+              <div class="testimonial-stars">★★★★★</div>
+              <p class="testimonial-text">
+                "Best music discovery app I've used. The AI actually gets the
+                nuances of my mood. The party playlist recommendations are
+                absolutely fire!"
+              </p>
+              <div class="testimonial-author">
+                <div class="testimonial-avatar">RK</div>
+                <div>
+                  <div class="testimonial-name">Rahul Kumar</div>
+                  <div class="testimonial-role">Engineer, Pune</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================
+     CTA SECTION
+     ============================== -->
+    <section style="background: var(--bg-secondary)">
+      <div class="container">
+        <div
+          class="text-center glass rounded-4 p-5"
+          data-aos="zoom-in"
+          style="background: var(--gradient-glow)"
+        >
+          <div style="font-size: 3rem; margin-bottom: 16px">🎵</div>
+          <h2
+            style="
+              font-size: 2.5rem;
+              margin-bottom: 16px;
+              font-family: var(--font-heading);
+            "
+          >
+            Ready to Find Your <span class="gradient-text">Sound?</span>
+          </h2>
+          <p
+            style="
+              color: var(--text-secondary);
+              max-width: 480px;
+              margin: 0 auto 32px;
+              line-height: 1.7;
+            "
+          >
+            Join thousands of music lovers who've discovered their perfect
+            soundtrack through AI-powered mood detection.
+          </p>
+          <div class="d-flex gap-3 justify-content-center flex-wrap">
+            <a href="pages/register.html" class="btn-primary">
+              <i class="fas fa-user-plus"></i> Create Free Account
+            </a>
+            <a href="pages/login.html" class="btn-outline">
+              <i class="fas fa-sign-in-alt"></i> Login
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================
+     FOOTER
+     ============================== -->
+    <footer class="footer">
+      <div class="container">
+        <div class="row g-4">
+          <div class="col-lg-4">
+            <div class="footer-brand d-flex align-items-center gap-2">
+              <div
+                class="logo-icon"
+                style="
+                  width: 36px;
+                  height: 36px;
+                  background: var(--gradient-main);
+                  border-radius: 8px;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                "
+              >
+                🎵
+              </div>
+              <span
+                style="
+                  font-family: var(--font-heading);
+                  font-size: 1.3rem;
+                  font-weight: 800;
+                "
+                class="gradient-text"
+                >MoodTune</span
+              >
+            </div>
+            <p class="footer-desc mt-3">
+              AI-powered music recommendations based on your emotional state.
+              Free forever.
+            </p>
+            <div class="d-flex gap-2 mt-4">
+              <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+              <a href="#" class="social-link"
+                ><i class="fab fa-instagram"></i
+              ></a>
+              <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+            </div>
+          </div>
+          <div class="col-6 col-lg-2 offset-lg-2">
+            <div class="footer-heading">Product</div>
+            <a href="#features" class="footer-link">Features</a>
+            <a href="#how-it-works" class="footer-link">How It Works</a>
+            <a href="#moods" class="footer-link">Mood Categories</a>
+            <a href="pages/register.html" class="footer-link">Get Started</a>
+          </div>
+
+          <div class="col-6 col-lg-2">
+            <div class="footer-heading">Legal</div>
+            <a href="#" class="footer-link">Privacy Policy</a>
+            <a href="#" class="footer-link">Terms of Service</a>
+            <a href="#" class="footer-link">Cookie Policy</a>
+          </div>
+        </div>
+        <div
+          class="footer-bottom d-flex align-items-center justify-content-between flex-wrap gap-2"
+        >
+          <p style="color: var(--text-muted); font-size: 0.875rem; margin: 0">
+            © 2026 MoodTune.
+          </p>
+          <p style="color: var(--text-muted); font-size: 0.875rem; margin: 0">
+            Surch your music
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+      // Init AOS
+      AOS.init({
+        duration: 600,
+        easing: "ease-out-quad",
+        once: true,
+        offset: 80,
+      });
+
+      // Create floating music notes
+      const notes = ["♪", "♫", "♩", "♬", "🎵", "🎶"];
+      const container = document.getElementById("floatingNotes");
+      for (let i = 0; i < 15; i++) {
+        const note = document.createElement("div");
+        note.className = "note";
+        note.textContent = notes[Math.floor(Math.random() * notes.length)];
+        note.style.left = `${Math.random() * 100}%`;
+        note.style.setProperty("--duration", `${8 + Math.random() * 8}s`);
+        note.style.setProperty("--delay", `${Math.random() * 8}s`);
+        container.appendChild(note);
+      }
+
+      // Update nav based on auth status
+      document.addEventListener("DOMContentLoaded", () => {
+        if (typeof Auth !== "undefined" && Auth.isLoggedIn()) {
+          const navActions = document.getElementById("navActions");
+          if (navActions) {
+            navActions.innerHTML = `<a href="pages/dashboard.html" class="btn-primary btn btn-sm"><i class="fas fa-music me-1"></i>My Dashboard</a>`;
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

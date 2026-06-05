@@ -1,0 +1,618 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mood Detect – MoodTune</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link href="../css/style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- SIDEBAR -->
+    <aside class="dashboard-sidebar">
+      <div class="sidebar-logo">
+        <div
+          style="
+            width: 32px;
+            height: 32px;
+            background: var(--gradient-main);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+          "
+        >
+          🎵
+        </div>
+        <span
+          style="
+            font-family: var(--font-heading);
+            font-weight: 800;
+            font-size: 1.15rem;
+          "
+          class="gradient-text"
+          >MoodTune</span
+        >
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Main</div>
+        <a href="dashboard.html" class="sidebar-link"
+          ><i class="fas fa-home"></i
+          ><span class="link-text">Dashboard</span></a
+        >
+        <a href="mood.html" class="sidebar-link active"
+          ><i class="fas fa-brain"></i
+          ><span class="link-text">Mood Detect</span></a
+        >
+        <a href="music.html" class="sidebar-link"
+          ><i class="fas fa-music"></i><span class="link-text">Music</span></a
+        >
+        <a href="search.html" class="sidebar-link"
+          ><i class="fas fa-search"></i><span class="link-text">Search</span></a
+        >
+        <div class="nav-section-label">Library</div>
+        <a href="favorites.html" class="sidebar-link"
+          ><i class="fas fa-heart"></i
+          ><span class="link-text">Favorites</span></a
+        >
+        <a href="history.html" class="sidebar-link"
+          ><i class="fas fa-history"></i
+          ><span class="link-text">History</span></a
+        >
+        <div class="nav-section-label">Account</div>
+        <a href="profile.html" class="sidebar-link"
+          ><i class="fas fa-user"></i><span class="link-text">Profile</span></a
+        >
+        <a href="#" class="sidebar-link" id="logoutBtn"
+          ><i class="fas fa-sign-out-alt"></i
+          ><span class="link-text">Logout</span></a
+        >
+      </nav>
+    </aside>
+
+    <main class="dashboard-main">
+      <div class="mb-4">
+        <h1 style="font-size: 1.8rem; font-weight: 800; margin-bottom: 4px">
+          AI Mood Detection 🤖
+        </h1>
+        <p style="color: var(--text-secondary)">
+          Tell us how you feel and we'll find the perfect music for you.
+        </p>
+      </div>
+
+      <div class="row g-4">
+        <!-- AI Text Input -->
+        <div class="col-lg-6">
+          <div class="glass rounded-4 p-4">
+            <div class="d-flex align-items-center gap-2 mb-3">
+              <div
+                style="
+                  width: 36px;
+                  height: 36px;
+                  background: rgba(124, 58, 237, 0.15);
+                  border-radius: 8px;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  font-size: 1rem;
+                "
+              >
+                🤖
+              </div>
+              <div>
+                <div style="font-weight: 700; font-size: 1rem">
+                  Describe Your Mood
+                </div>
+                <div style="font-size: 0.78rem; color: var(--text-muted)">
+                  AI-powered emotion analysis
+                </div>
+              </div>
+            </div>
+
+            <textarea
+              id="moodText"
+              class="mood-detect-textarea"
+              placeholder="e.g. 'I feel so happy today, everything is going great!' or 'I'm stressed about my exams and feeling down...'"
+            ></textarea>
+
+            <div
+              class="d-flex align-items-center justify-content-between mt-2 mb-3"
+            >
+              <span
+                style="font-size: 0.78rem; color: var(--text-muted)"
+                id="charCount"
+                >0 / 300</span
+              >
+              <div class="d-flex gap-2">
+                <button class="btn-ghost" id="clearBtn">
+                  <i class="fas fa-times"></i> Clear
+                </button>
+              </div>
+            </div>
+
+            <button
+              class="btn-primary w-100 justify-content-center"
+              id="analyzeBtn"
+            >
+              <span id="analyzeBtnText"
+                ><i class="fas fa-magic me-2"></i>Analyze My Mood</span
+              >
+              <span id="analyzeBtnLoader" style="display: none"
+                ><span class="loading-spinner"></span> Analyzing...</span
+              >
+            </button>
+
+            <!-- Example phrases -->
+            <div class="mt-4">
+              <div
+                style="
+                  font-size: 0.78rem;
+                  color: var(--text-muted);
+                  margin-bottom: 10px;
+                  text-transform: uppercase;
+                  letter-spacing: 0.08em;
+                "
+              >
+                Try these examples:
+              </div>
+              <div class="d-flex flex-wrap gap-2" id="examplePhrases">
+                <button
+                  class="example-tag"
+                  data-text="I feel so happy and energetic today!"
+                >
+                  😊 Happy vibe
+                </button>
+                <button
+                  class="example-tag"
+                  data-text="I'm feeling really sad and lonely right now"
+                >
+                  😢 Feeling low
+                </button>
+                <button
+                  class="example-tag"
+                  data-text="I need to focus and study hard for my exams"
+                >
+                  📚 Study mode
+                </button>
+                <button
+                  class="example-tag"
+                  data-text="I want to dance all night and party hard!"
+                >
+                  🎉 Party time
+                </button>
+                <button
+                  class="example-tag"
+                  data-text="I'm so in love and feeling romantic today"
+                >
+                  ❤️ Romantic mood
+                </button>
+                <button
+                  class="example-tag"
+                  data-text="I'm furious and really angry at everything"
+                >
+                  😡 Feeling angry
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mood Result -->
+        <div class="col-lg-6">
+          <div id="moodResultArea">
+            <!-- Or Manual Select -->
+            <div class="glass rounded-4 p-4">
+              <div class="d-flex align-items-center gap-2 mb-3">
+                <div
+                  style="
+                    width: 36px;
+                    height: 36px;
+                    background: rgba(236, 72, 153, 0.15);
+                    border-radius: 8px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 1rem;
+                  "
+                >
+                  🎭
+                </div>
+                <div>
+                  <div style="font-weight: 700; font-size: 1rem">
+                    Or Select Manually
+                  </div>
+                  <div style="font-size: 0.78rem; color: var(--text-muted)">
+                    Pick your current mood
+                  </div>
+                </div>
+              </div>
+              <div class="mood-grid" id="manualMoodGrid"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Voice Mood Detection -->
+      <div class="glass p-4 mb-4 rounded-4">
+        <h4>🎙️ Voice Mood Detection</h4>
+        <p style="color: var(--text-secondary)">
+          Speak how you're feeling and MoodTune will detect your mood.
+        </p>
+
+        <div style="margin-bottom: 15px">
+          <label style="display: block; margin-bottom: 8px">
+            Select Language
+          </label>
+
+          <select id="voiceLanguage" class="form-control">
+            <option value="en-IN">English</option>
+            <option value="hi-IN">Hindi</option>
+          </select>
+        </div>
+
+        <button id="voiceBtn" class="btn-primary">🎙️ Speak Your Mood</button>
+
+        <div id="voiceResult" style="margin-top: 15px"></div>
+      </div>
+    </main>
+
+    <style>
+      .example-tag {
+        padding: 6px 14px;
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 20px;
+        color: var(--text-secondary);
+        font-size: 0.8rem;
+        font-family: var(--font-body);
+        cursor: pointer;
+        transition: var(--transition);
+      }
+      .example-tag:hover {
+        background: rgba(124, 58, 237, 0.1);
+        border-color: var(--color-purple);
+        color: var(--color-purple-light);
+      }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/app.js"></script>
+    <script>
+      const voiceBtn = document.getElementById("voiceBtn");
+
+      voiceBtn.addEventListener("click", startVoiceDetection);
+
+      function startVoiceDetection() {
+        const SpeechRecognition =
+          window.SpeechRecognition || window.webkitSpeechRecognition;
+
+        if (!SpeechRecognition) {
+          alert("Speech Recognition is not supported in this browser.");
+          return;
+        }
+
+        const recognition = new SpeechRecognition();
+
+        // Language selected by user
+        recognition.lang = document.getElementById("voiceLanguage").value;
+
+        // Better settings
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 3;
+
+        // UI feedback
+        voiceBtn.disabled = true;
+        voiceBtn.innerHTML = "🎤 Listening...";
+
+        document.getElementById("voiceResult").innerHTML = "🎤 Speak now...";
+
+        // When recognition starts
+        recognition.onstart = () => {
+          console.log("Voice recognition started");
+        };
+
+        // Speech result
+        recognition.onresult = (event) => {
+          let text = event.results[event.results.length - 1][0].transcript;
+
+          text = text.trim().toLowerCase();
+
+          console.log("Voice Text:", text);
+
+          document.getElementById("voiceResult").innerHTML =
+            `✅ You said: "${text}"`;
+
+          detectMoodFromText(text);
+        };
+
+        // Error handling
+        recognition.onerror = (event) => {
+          console.log("Speech Error:", event.error);
+
+          let msg = "Voice detection failed";
+
+          switch (event.error) {
+            case "no-speech":
+              msg = "🎤 No speech detected. Speak louder.";
+              break;
+
+            case "audio-capture":
+              msg = "🎤 Microphone not found.";
+              break;
+
+            case "not-allowed":
+              msg = "🎤 Microphone permission denied.";
+              break;
+
+            case "network":
+              msg = "🌐 Network error. Check internet connection.";
+              break;
+
+            default:
+              msg = `❌ Error: ${event.error}`;
+          }
+
+          document.getElementById("voiceResult").innerHTML = msg;
+        };
+
+        // Finish
+        recognition.onend = () => {
+          console.log("Voice recognition ended");
+
+          voiceBtn.disabled = false;
+          voiceBtn.innerHTML = "🎙️ Speak Your Mood";
+        };
+
+        recognition.start();
+      }
+      function detectMoodFromText(text) {
+        text = text.toLowerCase();
+
+        let mood = "happy";
+
+        if (
+          text.includes("sad") ||
+          text.includes("lonely") ||
+          text.includes("cry") ||
+          text.includes("heartbroken") ||
+          text.includes("उदास") ||
+          text.includes("दुखी") ||
+          text.includes("रोना") ||
+          text.includes("depressed")
+        ) {
+          mood = "sad";
+        } else if (
+          text.includes("angry") ||
+          text.includes("frustrated") ||
+          text.includes("furious") ||
+          text.includes("गुस्सा") ||
+          text.includes("नाराज़") ||
+          text.includes("mad")
+        ) {
+          mood = "angry";
+        } else if (
+          text.includes("love") ||
+          text.includes("romantic") ||
+          text.includes("crush") ||
+          text.includes("girlfriend") ||
+          text.includes("गुस्सा") ||
+          text.includes("नाराज़") ||
+          text.includes("boyfriend")
+        ) {
+          mood = "romantic";
+        } else if (
+          text.includes("workout") ||
+          text.includes("energy") ||
+          text.includes("gym") ||
+          text.includes("running") ||
+          text.includes("energetic") ||
+          text.includes("प्यार") ||
+          text.includes("मोहब्बत") ||
+          text.includes("exercise")
+        ) {
+          mood = "energetic";
+        } else if (
+          text.includes("study") ||
+          text.includes("exam") ||
+          text.includes("focus") ||
+          text.includes("goal") ||
+          text.includes("पढ़ाई") ||
+          text.includes("एग्जाम") ||
+          text.includes("सफलता") ||
+          text.includes("success")
+        ) {
+          mood = "motivated";
+        } else if (
+          text.includes("party") ||
+          text.includes("dance") ||
+          text.includes("friends") ||
+          text.includes("पार्टी") ||
+          text.includes("डांस") ||
+          text.includes("celebrate")
+        ) {
+          mood = "party";
+        } else if (
+          text.includes("calm") ||
+          text.includes("peaceful") ||
+          text.includes("relax") ||
+          text.includes("आराम") ||
+          text.includes("शांत") ||
+          text.includes("chill")
+        ) {
+          mood = "relaxed";
+        }
+
+        document.getElementById("voiceResult").innerHTML =
+          `🎭 Mood Detected: <b>${mood}</b>`;
+
+        setTimeout(() => {
+          window.location.href = `music.html?mood=${mood}`;
+        }, 1500);
+      }
+      document.addEventListener("DOMContentLoaded", () => {
+        if (!Auth.requireAuth()) return;
+
+        document.getElementById("logoutBtn").addEventListener("click", (e) => {
+          e.preventDefault();
+          Auth.clearSession();
+          window.location.href = "../index.html";
+        });
+
+        // Build manual mood grid
+        buildManualMoodGrid();
+
+        // Character count
+        const textarea = document.getElementById("moodText");
+        textarea.addEventListener("input", () => {
+          const len = textarea.value.length;
+          const maxLen = 300;
+          if (len > maxLen)
+            textarea.value = textarea.value.substring(0, maxLen);
+          document.getElementById("charCount").textContent =
+            `${Math.min(len, maxLen)} / ${maxLen}`;
+        });
+
+        // Clear
+        document.getElementById("clearBtn").addEventListener("click", () => {
+          textarea.value = "";
+          document.getElementById("charCount").textContent = "0 / 300";
+          textarea.focus();
+        });
+
+        // Example phrases
+        document.querySelectorAll(".example-tag").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            textarea.value = btn.dataset.text;
+            textarea.dispatchEvent(new Event("input"));
+            textarea.focus();
+          });
+        });
+
+        // Analyze button
+        document
+          .getElementById("analyzeBtn")
+          .addEventListener("click", analyzeMood);
+      });
+
+      function buildManualMoodGrid() {
+        const grid = document.getElementById("manualMoodGrid");
+        grid.innerHTML = Object.entries(MOODS)
+          .map(
+            ([key, m]) => `
+      <div class="mood-card" onclick="selectMood('${key}', 'manual')"
+           style="--mood-color:${m.gradient};--mood-border:${m.border};--mood-shadow:${m.shadow};">
+        <span class="mood-emoji">${m.emoji}</span>
+        <div class="mood-name">${m.label}</div>
+      </div>`,
+          )
+          .join("");
+      }
+
+      async function analyzeMood() {
+        const text = document.getElementById("moodText").value.trim();
+        if (!text || text.length < 3) {
+          Toast.warning(
+            "Please enter at least 3 characters describing your mood.",
+          );
+          return;
+        }
+
+        const btn = document.getElementById("analyzeBtn");
+        const btnText = document.getElementById("analyzeBtnText");
+        const btnLoader = document.getElementById("analyzeBtnLoader");
+
+        btn.disabled = true;
+        btnText.style.display = "none";
+        btnLoader.style.display = "flex";
+
+        const res = await API.post("/mood/analyze", { text });
+
+        btn.disabled = false;
+        btnText.style.display = "flex";
+        btnLoader.style.display = "none";
+
+        if (res?.ok) {
+          const { mood, method } = res.data;
+          showMoodResult(mood, method, text);
+        } else {
+          Toast.error(
+            res?.data?.message || "Mood analysis failed. Please try again.",
+          );
+        }
+      }
+
+      function showMoodResult(mood, method, text) {
+        const m = MOODS[mood] || {
+          emoji: "🎵",
+          label: mood,
+          gradient: "var(--gradient-main)",
+        };
+        const methodLabel =
+          method === "ai" ? "🤖 AI Detected" : "🔤 Keyword Match";
+
+        document.getElementById("moodResultArea").innerHTML = `
+      <div class="mood-result" style="border-color:${m.border || "var(--border-color)"};background:${m.shadow ? m.shadow + "20" : "var(--glass-bg)"};">
+        <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.08em;">Your Mood</div>
+        <span class="mood-result-emoji">${m.emoji}</span>
+        <h2 style="font-size:2rem;font-weight:800;margin-bottom:8px;">${m.label}</h2>
+        <div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:24px;">${methodLabel}</div>
+        <p style="color:var(--text-secondary);font-size:0.9rem;font-style:italic;margin-bottom:28px;max-width:280px;margin-left:auto;margin-right:auto;">
+          "${text.length > 80 ? text.substring(0, 80) + "…" : text}"
+        </p>
+        <div class="d-flex flex-column gap-3">
+          <button class="btn-primary justify-content-center" onclick="selectMood('${mood}', '${method}')">
+            <i class="fas fa-music me-2"></i>Get ${m.label} Music
+          </button>
+          <button class="btn-ghost justify-content-center" onclick="resetResult()" style="margin:0 auto;">
+            <i class="fas fa-redo me-2"></i>Try Again
+          </button>
+        </div>
+      </div>`;
+      }
+
+      function resetResult() {
+        document.getElementById("moodResultArea").innerHTML = `
+      <div class="glass rounded-4 p-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <div style="width:36px;height:36px;background:rgba(236,72,153,0.15);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;">🎭</div>
+          <div>
+            <div style="font-weight:700;font-size:1rem;">Or Select Manually</div>
+            <div style="font-size:0.78rem;color:var(--text-muted);">Pick your current mood</div>
+          </div>
+        </div>
+        <div class="mood-grid" id="manualMoodGrid"></div>
+      </div>`;
+        buildManualMoodGrid();
+      }
+
+      async function selectMood(mood, method) {
+        // Save mood to history
+        const text = document.getElementById("moodText")?.value?.trim() || null;
+        await API.post("/mood/save", {
+          mood,
+          inputText: text,
+          detectionMethod: method,
+        });
+        Toast.success(
+          `${MOODS[mood].emoji} Mood saved! Loading ${MOODS[mood].label} music...`,
+        );
+        setTimeout(() => {
+          window.location.href = `music.html?mood=${mood}`;
+        }, 700);
+      }
+    </script>
+  </body>
+</html>
